@@ -1,0 +1,120 @@
+@import "tailwindcss";
+
+/* Class-based dark mode (driven by lib/theme.ts toggling .dark on <html>),
+   not the OS-media strategy Tailwind v4 defaults to. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  color-scheme: light dark;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  overflow: hidden;
+  background: #ffffff;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
+    Cantarell, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+}
+
+html.dark body {
+  background: #1c1c1f;
+}
+
+input,
+textarea {
+  user-select: text;
+}
+
+/* Thin, unobtrusive scrollbar for the history list */
+.scroll-thin::-webkit-scrollbar {
+  width: 8px;
+}
+.scroll-thin::-webkit-scrollbar-thumb {
+  background: rgba(120, 120, 130, 0.35);
+  border-radius: 4px;
+}
+.scroll-thin::-webkit-scrollbar-thumb:hover {
+  background: rgba(120, 120, 130, 0.55);
+}
+.scroll-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Drives the window-level fade in/out (see App.tsx) */
+.window-fade {
+  transition: opacity 200ms ease;
+}
+
+/* Toast entrance: a springy slide-up + settle (see Toast.tsx) */
+@keyframes toast-in {
+  0% {
+    transform: translate(-50%, 14px) scale(0.9);
+    opacity: 0;
+  }
+  55% {
+    transform: translate(-50%, -3px) scale(1.03);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, 0) scale(1);
+    opacity: 1;
+  }
+}
+.toast-visible {
+  animation: toast-in 380ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+.toast-hidden {
+  opacity: 0;
+  transform: translate(-50%, 10px) scale(0.94);
+  transition:
+    opacity 150ms ease,
+    transform 150ms ease;
+}
+
+/* Copy confirmation badge pop (see ClipCard.tsx) */
+@keyframes copy-pop {
+  0% {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  45% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+  70% {
+    transform: scale(0.95);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+.animate-copy-pop {
+  animation: copy-pop 650ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Same-duration accent ring flash behind the badge (see ClipCard.tsx) */
+@keyframes copy-ring {
+  0% {
+    box-shadow: 0 0 0 0 var(--color-accent-soft);
+  }
+  40% {
+    box-shadow: 0 0 0 6px var(--color-accent-soft);
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+.animate-copy-ring {
+  animation: copy-ring 650ms ease-out forwards;
+}

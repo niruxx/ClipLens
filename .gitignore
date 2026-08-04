@@ -1,6 +1,21 @@
-.venv/
-__pycache__/
-*.pyc
-build/
-dist/
-*.spec
+# Node
+node_modules
+dist
+dist-ssr
+*.local
+npm-debug.log*
+
+# Rust / Tauri
+/src-tauri/target/
+/src-tauri/gen/schemas
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
