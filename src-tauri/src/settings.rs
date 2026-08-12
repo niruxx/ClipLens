@@ -30,6 +30,10 @@ pub struct Settings {
     pub poll_interval_ms: u64,
     pub quick_hotkey: String,
     pub quick_position: String, // "cursor" | "bottom_right"
+    pub background_style: String, // "none" | "snow" | "stars" | "rain" | "confetti" | "custom"
+    pub background_color: String, // hex, used when background_style == "custom"
+    pub background_density: u32,  // particle count, used when background_style == "custom"
+    pub background_speed: f32,    // speed multiplier, used when background_style == "custom"
 }
 
 impl Default for Settings {
@@ -45,6 +49,10 @@ impl Default for Settings {
             poll_interval_ms: 400,
             quick_hotkey: DEFAULT_QUICK_HOTKEY.into(),
             quick_position: "cursor".into(),
+            background_style: "snow".into(),
+            background_color: "#8ecae6".into(),
+            background_density: 60,
+            background_speed: 1.0,
         }
     }
 }

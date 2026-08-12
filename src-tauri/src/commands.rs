@@ -91,6 +91,10 @@ pub struct SettingsPatch {
     pub start_minimized: Option<bool>,
     pub capture_images: Option<bool>,
     pub quick_position: Option<String>,
+    pub background_style: Option<String>,
+    pub background_color: Option<String>,
+    pub background_density: Option<u32>,
+    pub background_speed: Option<f32>,
 }
 
 #[tauri::command]
@@ -115,6 +119,18 @@ pub fn update_settings(
         }
         if let Some(v) = patch.quick_position {
             settings.quick_position = v;
+        }
+        if let Some(v) = patch.background_style {
+            settings.background_style = v;
+        }
+        if let Some(v) = patch.background_color {
+            settings.background_color = v;
+        }
+        if let Some(v) = patch.background_density {
+            settings.background_density = v;
+        }
+        if let Some(v) = patch.background_speed {
+            settings.background_speed = v;
         }
         let mut changed = None;
         if let Some(v) = patch.max_history_items {

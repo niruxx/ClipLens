@@ -17,6 +17,7 @@ export interface ClipItem {
 
 export type ThemeMode = "system" | "light" | "dark";
 export type QuickPosition = "cursor" | "bottom_right";
+export type BackgroundStyle = "none" | "snow" | "stars" | "rain" | "confetti" | "custom";
 
 export interface Settings {
   theme_mode: ThemeMode;
@@ -29,6 +30,10 @@ export interface Settings {
   poll_interval_ms: number;
   quick_hotkey: string;
   quick_position: QuickPosition;
+  background_style: BackgroundStyle;
+  background_color: string;
+  background_density: number;
+  background_speed: number;
 }
 
 export interface SettingsPatch {
@@ -38,6 +43,10 @@ export interface SettingsPatch {
   start_minimized?: boolean;
   capture_images?: boolean;
   quick_position?: QuickPosition;
+  background_style?: BackgroundStyle;
+  background_color?: string;
+  background_density?: number;
+  background_speed?: number;
 }
 
 export type Platform = "windows" | "macos" | "linux" | string;

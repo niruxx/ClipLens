@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import ClipCard from "./components/ClipCard";
 import EmptyState from "./components/EmptyState";
+import BackgroundEffect from "./components/BackgroundEffect";
 import Header from "./components/Header";
 import ResizeHandles from "./components/ResizeHandles";
 import Sidebar from "./components/Sidebar";
@@ -247,10 +248,18 @@ export default function App() {
 
   return (
     <div
-      className={`window-fade flex h-screen w-screen flex-col overflow-hidden bg-white text-neutral-900 dark:bg-[#1c1c1f] dark:text-neutral-100 ${visible ? "opacity-100" : "opacity-0"}`}
+      className={`window-fade relative flex h-screen w-screen flex-col overflow-hidden bg-white text-neutral-900 dark:bg-[#1c1c1f] dark:text-neutral-100 ${visible ? "opacity-100" : "opacity-0"}`}
     >
-      <TitleBar />
-      <div className="relative flex flex-1 overflow-hidden">
+      <BackgroundEffect
+        style={settings.background_style}
+        color={settings.background_color}
+        density={settings.background_density}
+        speed={settings.background_speed}
+      />
+      <div className="relative z-10 shrink-0">
+        <TitleBar />
+      </div>
+      <div className="relative z-10 flex flex-1 overflow-hidden">
         <Sidebar filter={filter} onFilterChange={setFilter} counts={counts} />
 
         <div className="flex flex-1 flex-col overflow-hidden border-l border-black/6 dark:border-white/8">

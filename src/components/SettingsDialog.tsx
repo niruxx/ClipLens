@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { QuickPosition, Settings, SettingsPatch, ThemeMode } from "../types";
+import type { BackgroundStyle, QuickPosition, Settings, SettingsPatch, ThemeMode } from "../types";
 import { CloseIcon, TrashIcon } from "./icons";
 
 const TRANSITION_MS = 180;
@@ -20,6 +20,15 @@ interface SettingsDialogProps {
 const QUICK_POSITIONS: { value: QuickPosition; label: string }[] = [
   { value: "cursor", label: "Near cursor" },
   { value: "bottom_right", label: "Bottom right" },
+];
+
+const BACKGROUND_STYLES: { value: BackgroundStyle; label: string }[] = [
+  { value: "none", label: "None" },
+  { value: "snow", label: "Snow" },
+  { value: "stars", label: "Stars" },
+  { value: "rain", label: "Rain" },
+  { value: "confetti", label: "Confetti" },
+  { value: "custom", label: "Custom" },
 ];
 
 const THEME_MODES: { value: ThemeMode; label: string }[] = [
@@ -117,6 +126,70 @@ export default function SettingsDialog({
               />
             ))}
           </div>
+
+          <Divider />
+
+          <SectionLabel>Background</SectionLabel>
+          <div className="grid grid-cols-3 gap-2">
+            {BACKGROUND_STYLES.map(({ value, label }) => (
+              <button
+                key={value}
+                type="button"
+                onClick={() => onPatch({ background_style: value })}
+                className={`rounded-lg border px-2 py-1.5 text-[12.5px] transition-colors ${
+                  settings.background_style === value
+                    ? "border-[var(--color-accent)] bg-[var(--color-accent-soft)] text-[var(--color-accent)]"
+                    : "border-black/10 text-neutral-700 hover:bg-black/5 dark:border-white/15 dark:text-neutral-300 dark:hover:bg-white/8"
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+
+          {settings.background_style === "custom" && (
+            <div className="space-y-2.5 rounded-lg border border-black/8 p-2.5 dark:border-white/10">
+              <div className="flex items-center justify-between">
+                <p className="text-[12.5px] text-neutral-800 dark:text-neutral-100">
+                  Particle color
+                </p>
+                <input
+                  type="color"
+                  value={settings.background_color}
+                  onChange={(e) => onPatch({ background_color: e.target.value })}
+                  className="h-7 w-10 cursor-pointer rounded border border-black/10 bg-transparent dark:border-white/15"
+                />
+              </div>
+              <div>
+                <p className="mb-1 text-[12.5px] text-neutral-800 dark:text-neutral-100">
+                  Density: {settings.background_density}
+                </p>
+                <input
+                  type="range"
+                  min={10}
+                  max={150}
+                  step={5}
+                  value={settings.background_density}
+                  onChange={(e) => onPatch({ background_density: Number(e.target.value) })}
+                  className="w-full accent-[var(--color-accent)]"
+                />
+              </div>
+              <div>
+                <p className="mb-1 text-[12.5px] text-neutral-800 dark:text-neutral-100">
+                  Speed: {settings.background_speed.toFixed(1)}x
+                </p>
+                <input
+                  type="range"
+                  min={0.3}
+                  max={3}
+                  step={0.1}
+                  value={settings.background_speed}
+                  onChange={(e) => onPatch({ background_speed: Number(e.target.value) })}
+                  className="w-full accent-[var(--color-accent)]"
+                />
+              </div>
+            </div>
+          )}
 
           <Divider />
 
