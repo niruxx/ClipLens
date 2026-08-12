@@ -177,6 +177,14 @@ export default function App() {
     [showToast],
   );
 
+  const onSetQuickHotkey = useCallback(
+    (hotkey: string) =>
+      api.setQuickHotkey(hotkey).then(() => {
+        refreshSettings();
+      }),
+    [refreshSettings],
+  );
+
   const onClearUnpinned = useCallback(() => {
     api.clearHistory(true).then(() => {
       refreshItems();
@@ -289,6 +297,7 @@ export default function App() {
             onClose={() => setSettingsOpen(false)}
             onPatch={onPatchSettings}
             onToggleAutostart={onToggleAutostart}
+            onSetQuickHotkey={onSetQuickHotkey}
             onClearUnpinned={onClearUnpinned}
             onClearAll={onClearAll}
           />

@@ -16,6 +16,7 @@ export interface ClipItem {
 }
 
 export type ThemeMode = "system" | "light" | "dark";
+export type QuickPosition = "cursor" | "bottom_right";
 
 export interface Settings {
   theme_mode: ThemeMode;
@@ -26,6 +27,8 @@ export interface Settings {
   monitor_paused: boolean;
   capture_images: boolean;
   poll_interval_ms: number;
+  quick_hotkey: string;
+  quick_position: QuickPosition;
 }
 
 export interface SettingsPatch {
@@ -34,6 +37,7 @@ export interface SettingsPatch {
   max_history_items?: number;
   start_minimized?: boolean;
   capture_images?: boolean;
+  quick_position?: QuickPosition;
 }
 
 export type Platform = "windows" | "macos" | "linux" | string;

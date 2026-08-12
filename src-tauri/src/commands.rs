@@ -1,7 +1,7 @@
 use crate::db::{self, ClipItem};
 use crate::settings::Settings;
 use crate::state::AppState;
-use crate::{clipboard, tray};
+use crate::{clipboard, hotkey, quickpanel, tray};
 use arboard::Clipboard;
 use serde::Deserialize;
 use tauri::{AppHandle, Emitter, Manager, State};
@@ -90,6 +90,7 @@ pub struct SettingsPatch {
     pub max_history_items: Option<u32>,
     pub start_minimized: Option<bool>,
     pub capture_images: Option<bool>,
+    pub quick_position: Option<String>,
 }
 
 #[tauri::command]
@@ -111,6 +112,9 @@ pub fn update_settings(
         }
         if let Some(v) = patch.start_minimized {
             settings.start_minimized = v;
+        }
+        if let Some(v) = patch.quick_position {
+            settings.quick_position = v;
         }
         let mut changed = None;
         if let Some(v) = patch.max_history_items {
@@ -225,4 +229,32 @@ pub fn hide_to_tray(app: AppHandle) {
 #[tauri::command]
 pub fn quit_app(app: AppHandle) {
     app.exit(0);
+}
+
+#[tauri::command]
+pub fn hide_quick_window(app: AppHandle) {
+    quickpanel::hide(&app);
+}
+
+#[tauri::command]
+pub fn set_quick_hotkey(
+    app: AppHandle,
+    state: State<AppState>,
+    new_hotkey: String,
+) -> Result<(), String> {
+    let previous = state.settings.lock().unwrap().quick_hotkey.clone();
+    if new_hotkey == previous {
+        return Ok(());
+    }
+
+    hotkey::unregister(&app, &previous);
+    if let Err(e) = hotkey::register(&app, &new_hotkey) {
+        // Put the old one back so the app doesn't end up with no hotkey at all.
+        let _ = hotkey::register(&app, &previous);
+        return Err(e);
+    }
+
+    state.settings.lock().unwrap().quick_hotkey = new_hotkey;
+    state.save_settings();
+    Ok(())
 }

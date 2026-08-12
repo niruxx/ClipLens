@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { Settings, SettingsPatch, ThemeMode } from "../types";
+import type { QuickPosition, Settings, SettingsPatch, ThemeMode } from "../types";
 import { CloseIcon, TrashIcon } from "./icons";
 
 const TRANSITION_MS = 180;
@@ -12,9 +12,15 @@ interface SettingsDialogProps {
   onClose: () => void;
   onPatch: (patch: SettingsPatch) => void;
   onToggleAutostart: (enabled: boolean) => void;
+  onSetQuickHotkey: (hotkey: string) => Promise<void>;
   onClearUnpinned: () => void;
   onClearAll: () => void;
 }
+
+const QUICK_POSITIONS: { value: QuickPosition; label: string }[] = [
+  { value: "cursor", label: "Near cursor" },
+  { value: "bottom_right", label: "Bottom right" },
+];
 
 const THEME_MODES: { value: ThemeMode; label: string }[] = [
   { value: "system", label: "System" },
@@ -30,6 +36,7 @@ export default function SettingsDialog({
   onClose,
   onPatch,
   onToggleAutostart,
+  onSetQuickHotkey,
   onClearUnpinned,
   onClearAll,
 }: SettingsDialogProps) {
@@ -159,6 +166,31 @@ export default function SettingsDialog({
 
           <Divider />
 
+          <SectionLabel>Quick Access</SectionLabel>
+          <p className="text-[11px] text-neutral-500 dark:text-neutral-400">
+            Global shortcut to pop up a mini clipboard picker from anywhere.
+          </p>
+          <HotkeyRecorder value={settings.quick_hotkey} onChange={onSetQuickHotkey} />
+          <p className="text-[11px] text-neutral-500 dark:text-neutral-400">Popup position</p>
+          <div className="flex gap-2">
+            {QUICK_POSITIONS.map(({ value, label }) => (
+              <button
+                key={value}
+                type="button"
+                onClick={() => onPatch({ quick_position: value })}
+                className={`flex-1 rounded-lg border px-3 py-1.5 text-[12.5px] transition-colors ${
+                  settings.quick_position === value
+                    ? "border-[var(--color-accent)] bg-[var(--color-accent-soft)] text-[var(--color-accent)]"
+                    : "border-black/10 text-neutral-700 hover:bg-black/5 dark:border-white/15 dark:text-neutral-300 dark:hover:bg-white/8"
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+
+          <Divider />
+
           <SectionLabel>Startup</SectionLabel>
           <label className="flex cursor-pointer items-center gap-2 text-[13px] text-neutral-800 dark:text-neutral-100">
             <input
@@ -180,7 +212,8 @@ export default function SettingsDialog({
           </label>
         </div>
 
-        <div className="flex shrink-0 justify-end border-t border-black/8 px-4 py-2.5 dark:border-white/10">
+        <div className="flex shrink-0 items-center justify-between border-t border-black/8 px-4 py-2.5 dark:border-white/10">
+          <p className="text-[11px] text-neutral-400 dark:text-neutral-500">- niruxxdaboi -</p>
           <button
             type="button"
             onClick={requestClose}
@@ -204,4 +237,99 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 
 function Divider() {
   return <div className="h-px bg-black/8 dark:bg-white/10" />;
+}
+
+/** Captures the next key combo pressed while "recording" and hands it up as
+ * a hotkey string like "Ctrl+Shift+KeyV" (matches the Rust-side parser's
+ * format, which mirrors the web KeyboardEvent.code naming). */
+function HotkeyRecorder({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (hotkey: string) => Promise<void>;
+}) {
+  const [recording, setRecording] = useState(false);
+  const [pending, setPending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!recording) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (e.key === "Escape") {
+        setRecording(false);
+        return;
+      }
+      const combo = formatKeyCombo(e);
+      if (!combo) return;
+      setRecording(false);
+      setPending(true);
+      setError(null);
+      onChange(combo)
+        .catch((err) => setError(typeof err === "string" ? err : "Couldn't set that shortcut."))
+        .finally(() => setPending(false));
+    };
+    window.addEventListener("keydown", onKeyDown, true);
+    return () => window.removeEventListener("keydown", onKeyDown, true);
+  }, [recording, onChange]);
+
+  return (
+    <div className="space-y-1.5">
+      <button
+        type="button"
+        disabled={pending}
+        onClick={() => {
+          setError(null);
+          setRecording(true);
+        }}
+        className={`w-full rounded-lg border px-3 py-1.5 text-left text-[13px] transition-colors ${
+          recording
+            ? "border-[var(--color-accent)] text-[var(--color-accent)]"
+            : "border-black/10 text-neutral-800 hover:bg-black/5 dark:border-white/15 dark:text-neutral-100 dark:hover:bg-white/8"
+        }`}
+      >
+        {recording ? "Press a key combination… (Esc to cancel)" : formatHotkeyDisplay(value)}
+      </button>
+      {recording && (
+        <p className="text-[11px] text-neutral-500 dark:text-neutral-400">
+          Must include Ctrl or Win.
+        </p>
+      )}
+      {error && <p className="text-[11px] text-red-500">{error}</p>}
+    </div>
+  );
+}
+
+function formatKeyCombo(e: KeyboardEvent): string | null {
+  if (["Control", "Shift", "Alt", "Meta"].includes(e.key)) return null;
+  // Some synthetic/IME input can leave `code` empty; without it we can't
+  // build a valid combo, so just ignore the keystroke rather than send a
+  // malformed shortcut to the backend.
+  if (!e.code) return null;
+  // Require Ctrl or Win/Cmd as the anchor modifier - Alt-only combos are
+  // reserved by Windows as menu-mnemonic "system keys" (WM_SYSKEYDOWN),
+  // which can misbehave when captured from inside a hosted webview, and
+  // Shift-only would swallow a shifted character everywhere.
+  if (!e.ctrlKey && !e.metaKey) return null;
+  const mods: string[] = [];
+  if (e.ctrlKey) mods.push("Ctrl");
+  if (e.metaKey) mods.push("Super");
+  if (e.altKey) mods.push("Alt");
+  if (e.shiftKey) mods.push("Shift");
+  return [...mods, e.code].join("+");
+}
+
+function formatHotkeyDisplay(combo: string): string {
+  return combo
+    .split("+")
+    .map((token) => {
+      if (token === "CmdOrCtrl") return "Ctrl";
+      if (token === "Super") return "Win";
+      if (token.startsWith("Key")) return token.slice(3);
+      if (token.startsWith("Digit")) return token.slice(5);
+      return token;
+    })
+    .join(" + ");
 }

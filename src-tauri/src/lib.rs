@@ -1,10 +1,13 @@
 mod clipboard;
 mod commands;
 mod db;
+mod hotkey;
 mod monitor;
+mod quickpanel;
 mod settings;
 mod state;
 mod tray;
+mod webview_tweaks;
 mod winfocus;
 
 use settings::Settings;
@@ -24,6 +27,7 @@ pub fn run() {
             MacosLauncher::LaunchAgent,
             Some(vec!["--minimized"]),
         ))
+        .plugin(tauri_plugin_global_shortcut::Builder::new().build())
         .invoke_handler(tauri::generate_handler![
             commands::list_items,
             commands::toggle_pin,
@@ -41,6 +45,8 @@ pub fn run() {
             commands::get_autostart_label,
             commands::hide_to_tray,
             commands::quit_app,
+            commands::hide_quick_window,
+            commands::set_quick_hotkey,
         ])
         .setup(move |app| {
             let data_dir = app
@@ -56,6 +62,7 @@ pub fn run() {
             let settings = Settings::load(&settings_path);
             let conn = db::open(&db_path).expect("open database");
             let effective_start_minimized = start_minimized_flag || settings.start_minimized;
+            let initial_hotkey = settings.quick_hotkey.clone();
 
             app.manage(AppState {
                 conn: Mutex::new(conn),
@@ -70,7 +77,13 @@ pub fn run() {
             tray::build(&app.handle())?;
             monitor::spawn(app.handle().clone());
 
+            quickpanel::create(&app.handle())?;
+            if let Err(e) = hotkey::register(&app.handle(), &initial_hotkey) {
+                eprintln!("Failed to register quick-access hotkey {initial_hotkey:?}: {e}");
+            }
+
             let window = app.get_webview_window("main").expect("main window");
+            webview_tweaks::disable_browser_accelerator_keys(&window);
             if effective_start_minimized {
                 // The window is created visible (see tauri.conf.json) because
                 // WebView2 can get stuck un-painted if a window is created

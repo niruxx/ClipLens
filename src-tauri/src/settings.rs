@@ -5,6 +5,7 @@ use std::fs;
 use std::path::Path;
 
 pub const DEFAULT_SEED_COLOR: &str = "#6750A4";
+pub const DEFAULT_QUICK_HOTKEY: &str = "CmdOrCtrl+Shift+V";
 
 pub const SEED_COLOR_CHOICES: &[(&str, &str)] = &[
     ("Purple", "#6750A4"),
@@ -27,6 +28,8 @@ pub struct Settings {
     pub monitor_paused: bool,
     pub capture_images: bool,
     pub poll_interval_ms: u64,
+    pub quick_hotkey: String,
+    pub quick_position: String, // "cursor" | "bottom_right"
 }
 
 impl Default for Settings {
@@ -40,6 +43,8 @@ impl Default for Settings {
             monitor_paused: false,
             capture_images: true,
             poll_interval_ms: 400,
+            quick_hotkey: DEFAULT_QUICK_HOTKEY.into(),
+            quick_position: "cursor".into(),
         }
     }
 }

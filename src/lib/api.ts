@@ -26,6 +26,9 @@ export const api = {
 
   hideToTray: () => invoke<void>("hide_to_tray"),
   quit: () => invoke<void>("quit_app"),
+
+  hideQuickWindow: () => invoke<void>("hide_quick_window"),
+  setQuickHotkey: (newHotkey: string) => invoke<void>("set_quick_hotkey", { newHotkey }),
 };
 
 let cachedImagesDir: string | null = null;
@@ -54,4 +57,6 @@ export const events = {
     listen("request-quit", cb),
   onWindowShown: (cb: () => void): Promise<UnlistenFn> =>
     listen("window-shown", cb),
+  onQuickShown: (cb: () => void): Promise<UnlistenFn> =>
+    listen("quick-shown", cb),
 };
