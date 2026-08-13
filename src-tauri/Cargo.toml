@@ -1,6 +1,6 @@
 [package]
 name = "crossclip"
-version = "0.1.0"
+version = "0.2.0"
 description = "A minimal clipboard manager and history tracker"
 authors = ["you"]
 edition = "2021"
