@@ -1,7 +1,7 @@
 import { imageSrc } from "../lib/api";
 import { humanTime, previewLine } from "../lib/format";
 import type { ClipItem } from "../types";
-import { CheckIcon, DocIcon, ImageIcon, PinIcon, TrashIcon } from "./icons";
+import { CheckIcon, DocIcon, PinIcon, TrashIcon } from "./icons";
 
 interface ClipCardProps {
   item: ClipItem;
@@ -23,69 +23,83 @@ export default function ClipCard({
     ? `${item.width}×${item.height}`
     : `${item.content?.length ?? 0} characters`;
 
+  const hasImage = isImage && !!item.thumb_path;
+
   return (
     <div
       onClick={() => onCopy(item.id)}
-      className={`group relative mb-3 inline-block w-full cursor-pointer break-inside-avoid-column rounded-2xl border border-black/6 bg-white px-4 py-3.5 shadow-sm transition-all active:scale-[0.98] hover:-translate-y-0.5 hover:border-black/10 hover:shadow-md dark:border-white/8 dark:bg-white/[0.04] dark:hover:border-white/15 ${
+      className={`tile-elevate group relative aspect-square cursor-pointer overflow-hidden rounded-2xl bg-neutral-100 transition-transform active:scale-[0.97] dark:bg-[#303134] ${
         justCopied ? "animate-copy-ring" : ""
       }`}
     >
-      {justCopied && (
-        <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center rounded-[inherit]">
-          <div className="animate-copy-pop grid h-11 w-11 place-items-center rounded-full bg-[var(--color-accent)] text-white shadow-lg">
-            <CheckIcon size={20} />
+      {hasImage ? (
+        <img
+          src={imageSrc(item.thumb_path!)}
+          alt=""
+          draggable={false}
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+      ) : (
+        <div className="flex h-full flex-col gap-2 p-4">
+          <div className="flex items-center gap-1.5 text-[11px] text-neutral-500 dark:text-neutral-400">
+            <DocIcon size={13} />
+            <span>{meta}</span>
           </div>
+          <p className="line-clamp-[9] flex-1 whitespace-pre-wrap break-words text-[13px] leading-relaxed text-neutral-800 dark:text-neutral-100">
+            {previewLine(item.content ?? "")}
+          </p>
         </div>
       )}
 
-      <div className="mb-2 flex items-center gap-1.5 text-[11px] text-neutral-500 dark:text-neutral-400">
-        {isImage ? <ImageIcon size={13} /> : <DocIcon size={13} />}
-        <span>{meta}</span>
-        <span className="flex-1" />
-        <span>{humanTime(item.updated_at)}</span>
-      </div>
-
-      {isImage && item.thumb_path ? (
-        <img
-          src={imageSrc(item.thumb_path)}
-          alt=""
-          className="max-h-[280px] w-full rounded-lg object-cover"
-          draggable={false}
-        />
-      ) : (
-        <p className="line-clamp-6 whitespace-pre-wrap break-words text-[13px] leading-relaxed text-neutral-800 dark:text-neutral-100">
-          {previewLine(item.content ?? "")}
-        </p>
+      {hasImage && (
+        <>
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-black/45 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/50 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+          <span className="absolute bottom-2.5 left-3 text-[11px] font-medium text-white opacity-0 drop-shadow transition-opacity group-hover:opacity-100">
+            {meta} · {humanTime(item.updated_at)}
+          </span>
+        </>
       )}
 
-      <div className="mt-2.5 flex items-center justify-end gap-0.5">
-        <button
-          type="button"
-          title={item.pinned ? "Unpin" : "Pin"}
-          onClick={(e) => {
-            e.stopPropagation();
-            onTogglePin(item.id);
-          }}
-          className={`grid h-7 w-7 place-items-center rounded-md transition-opacity hover:bg-black/8 dark:hover:bg-white/10 ${
-            item.pinned
-              ? "text-[var(--color-accent)]"
-              : "text-neutral-500 opacity-0 group-hover:opacity-100 dark:text-neutral-400"
-          }`}
-        >
-          <PinIcon size={14} filled={item.pinned} />
-        </button>
-        <button
-          type="button"
-          title="Delete"
-          onClick={(e) => {
-            e.stopPropagation();
-            onDelete(item.id);
-          }}
-          className="grid h-7 w-7 place-items-center rounded-md text-neutral-500 opacity-0 transition-opacity hover:bg-black/8 group-hover:opacity-100 dark:text-neutral-400 dark:hover:bg-white/10"
-        >
-          <TrashIcon size={14} />
-        </button>
-      </div>
+      <button
+        type="button"
+        title={item.pinned ? "Unpin" : "Pin"}
+        onClick={(e) => {
+          e.stopPropagation();
+          onTogglePin(item.id);
+        }}
+        className={`absolute right-2 top-2 grid h-8 w-8 place-items-center rounded-full transition-opacity ${
+          item.pinned
+            ? `opacity-100 ${hasImage ? "text-white" : "text-[var(--color-accent)]"}`
+            : `opacity-0 group-hover:opacity-100 ${hasImage ? "text-white hover:bg-white/20" : "text-neutral-600 hover:bg-black/8 dark:text-neutral-300 dark:hover:bg-white/10"}`
+        }`}
+      >
+        <PinIcon size={15} filled={item.pinned} />
+      </button>
+
+      <button
+        type="button"
+        title="Delete"
+        onClick={(e) => {
+          e.stopPropagation();
+          onDelete(item.id);
+        }}
+        className={`absolute bottom-2 right-2 grid h-8 w-8 place-items-center rounded-full opacity-0 transition-opacity group-hover:opacity-100 ${
+          hasImage
+            ? "text-white hover:bg-white/20"
+            : "text-neutral-600 hover:bg-black/8 dark:text-neutral-300 dark:hover:bg-white/10"
+        }`}
+      >
+        <TrashIcon size={15} />
+      </button>
+
+      {justCopied && (
+        <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center rounded-[inherit] bg-black/10">
+          <div className="animate-copy-pop grid h-12 w-12 place-items-center rounded-full bg-[var(--color-accent)] text-white shadow-lg">
+            <CheckIcon size={22} />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

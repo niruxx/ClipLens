@@ -24,7 +24,7 @@ Runs on **Windows, macOS, and Linux**.
 - Persistent history in a local SQLite database — survives restarts.
 - Image copies are thumbnailed and stored alongside the full-size original.
 - Sidebar navigation across All, Pinned, Text, and Images, each with a live count.
-- A responsive masonry grid (1–3 columns depending on window width) instead of one long list.
+- A responsive photo-grid layout (Google Photos-style tiles) that reflows to fit the window width.
 - Search box to filter history by text content.
 
 **Acting on an item**
@@ -39,7 +39,9 @@ Runs on **Windows, macOS, and Linux**.
 - A configurable history limit — oldest unpinned items are pruned automatically.
 
 **Look & feel**
-- Flat light/dark themes built from a chosen accent color, with light/dark/system modes.
+- A Google Photos-inspired look: a pill-shaped nav rail and search bar, edge-to-edge photo tiles, and Material-style dialogs.
+- Light/dark themes built from a chosen accent color, with light/dark/system modes.
+- Optional animated background (snow, stars, rain, confetti, or a fully custom color/density/speed) behind the history grid.
 - Custom frameless window with its own title bar, centered on screen with a fade-in/fade-out animation.
 - Settings open in an animated modal (fade + spring-scale in and out).
 - Secondary actions (Settings, autostart, clear-history, quit) are tucked behind a hamburger menu — the header only ever surfaces search and pause/resume.

@@ -7,7 +7,7 @@ export default function TitleBar() {
   return (
     <div
       data-tauri-drag-region
-      className="flex h-8 shrink-0 items-center justify-end gap-1 border-b border-black/8 bg-black/[0.015] px-2 dark:border-white/10 dark:bg-white/[0.02]"
+      className="flex h-8 shrink-0 items-center justify-end gap-1 bg-white px-2 dark:bg-[#202124]"
     >
       <button
         type="button"

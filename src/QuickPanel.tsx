@@ -73,26 +73,26 @@ export default function QuickPanel() {
   };
 
   if (!ready) {
-    return <div className="h-screen w-screen bg-white dark:bg-[#1c1c1f]" />;
+    return <div className="h-screen w-screen bg-white dark:bg-[#202124]" />;
   }
 
   return (
-    <div className="flex h-screen w-screen flex-col overflow-hidden bg-white text-neutral-900 dark:bg-[#1c1c1f] dark:text-neutral-100">
-      <div className="relative shrink-0 border-b border-black/6 p-2.5 dark:border-white/8">
+    <div className="flex h-screen w-screen flex-col overflow-hidden bg-white text-neutral-900 dark:bg-[#202124] dark:text-neutral-100">
+      <div className="relative shrink-0 p-3">
         <SearchIcon
           size={14}
-          className="pointer-events-none absolute left-5 top-1/2 -translate-y-1/2 text-neutral-400"
+          className="pointer-events-none absolute left-6 top-1/2 -translate-y-1/2 text-neutral-500 dark:text-neutral-400"
         />
         <input
           ref={searchRef}
           value={search}
           onChange={(e) => onSearchChange(e.target.value)}
-          placeholder="Search history"
-          className="w-full rounded-lg border border-transparent bg-black/5 py-1.5 pl-8 pr-2.5 text-[13px] text-neutral-900 outline-none placeholder:text-neutral-400 focus:border-[var(--color-accent)] focus:bg-white dark:bg-white/8 dark:text-neutral-100 dark:focus:bg-neutral-900"
+          placeholder="Search your clipboard"
+          className="w-full rounded-full border border-transparent bg-[#f1f3f4] py-2 pl-9 pr-3 text-[13px] text-neutral-900 outline-none placeholder:text-neutral-500 focus:bg-white focus:shadow-[0_1px_2px_0_rgba(60,64,67,0.3),0_1px_3px_1px_rgba(60,64,67,0.15)] dark:bg-[#303134] dark:text-neutral-100 dark:placeholder:text-neutral-400 dark:focus:bg-[#28292c]"
         />
       </div>
 
-      <div className="scroll-thin flex-1 overflow-y-auto p-1.5">
+      <div className="scroll-thin flex-1 overflow-y-auto px-2 pb-1.5">
         {items.length === 0 ? (
           <p className="px-3 py-8 text-center text-[12px] text-neutral-400">
             {search.trim() ? "No matches" : "No clipboard history yet"}
@@ -102,7 +102,7 @@ export default function QuickPanel() {
         )}
       </div>
 
-      <div className="flex shrink-0 items-center justify-between border-t border-black/6 px-3 py-1.5 text-[11px] text-neutral-400 dark:border-white/8">
+      <div className="flex shrink-0 items-center justify-between px-4 py-2 text-[11px] text-neutral-400">
         <span>{items.length} item{items.length === 1 ? "" : "s"}</span>
         <span>Esc to close</span>
       </div>
@@ -116,17 +116,17 @@ function QuickItem({ item, onCopy }: { item: ClipItem; onCopy: (id: number) => v
     <button
       type="button"
       onClick={() => onCopy(item.id)}
-      className="flex w-full items-center gap-2.5 rounded-lg px-2 py-1.5 text-left hover:bg-black/6 dark:hover:bg-white/8"
+      className="flex w-full items-center gap-2.5 rounded-2xl px-2.5 py-2 text-left hover:bg-black/6 dark:hover:bg-white/8"
     >
       {isImage && item.thumb_path ? (
         <img
           src={imageSrc(item.thumb_path)}
           alt=""
           draggable={false}
-          className="h-9 w-9 shrink-0 rounded-md object-cover"
+          className="h-10 w-10 shrink-0 rounded-xl object-cover"
         />
       ) : (
-        <div className="grid h-9 w-9 shrink-0 place-items-center rounded-md bg-black/5 text-neutral-500 dark:bg-white/8 dark:text-neutral-400">
+        <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-black/5 text-neutral-500 dark:bg-white/8 dark:text-neutral-400">
           {isImage ? <ImageIcon size={15} /> : <DocIcon size={15} />}
         </div>
       )}

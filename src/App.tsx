@@ -243,12 +243,12 @@ export default function App() {
   }, [filter, search]);
 
   if (!ready || !settings) {
-    return <div className="h-screen w-screen bg-white dark:bg-[#1c1c1f]" />;
+    return <div className="h-screen w-screen bg-white dark:bg-[#202124]" />;
   }
 
   return (
     <div
-      className={`window-fade relative flex h-screen w-screen flex-col overflow-hidden bg-white text-neutral-900 dark:bg-[#1c1c1f] dark:text-neutral-100 ${visible ? "opacity-100" : "opacity-0"}`}
+      className={`window-fade relative flex h-screen w-screen flex-col overflow-hidden bg-white text-neutral-900 dark:bg-[#202124] dark:text-neutral-100 ${visible ? "opacity-100" : "opacity-0"}`}
     >
       <BackgroundEffect
         style={settings.background_style}
@@ -262,7 +262,7 @@ export default function App() {
       <div className="relative z-10 flex flex-1 overflow-hidden">
         <Sidebar filter={filter} onFilterChange={setFilter} counts={counts} />
 
-        <div className="flex flex-1 flex-col overflow-hidden border-l border-black/6 dark:border-white/8">
+        <div className="flex flex-1 flex-col overflow-hidden">
           <Header
             search={search}
             onSearchChange={onSearchChange}
@@ -277,11 +277,11 @@ export default function App() {
             onQuit={onQuit}
           />
 
-          <div className="scroll-thin flex-1 overflow-y-auto p-5">
+          <div className="scroll-thin flex-1 overflow-y-auto px-6 pb-6 pt-2">
             {filteredItems.length === 0 ? (
               <EmptyState title={emptyCopy.title} hint={emptyCopy.hint} />
             ) : (
-              <div className="columns-1 gap-4 min-[700px]:columns-2 min-[960px]:columns-3">
+              <div className="grid grid-cols-[repeat(auto-fill,minmax(168px,1fr))] gap-2">
                 {filteredItems.map((item) => (
                   <ClipCard
                     key={item.id}

@@ -72,24 +72,24 @@ export default function SettingsDialog({
       }}
     >
       <div
-        className={`flex max-h-full w-full max-w-[380px] flex-col overflow-hidden rounded-2xl border border-black/8 bg-white shadow-2xl transition-all duration-[180ms] ease-[cubic-bezier(0.34,1.56,0.64,1)] dark:border-white/10 dark:bg-[#232327] ${
+        className={`flex max-h-full w-full max-w-[400px] flex-col overflow-hidden rounded-[28px] bg-white shadow-[0_4px_8px_3px_rgba(60,64,67,0.15),0_1px_3px_rgba(60,64,67,0.3)] transition-all duration-[180ms] ease-[cubic-bezier(0.34,1.56,0.64,1)] dark:bg-[#2d2e30] ${
           visible ? "translate-y-0 scale-100 opacity-100" : "translate-y-2 scale-95 opacity-0"
         }`}
       >
-        <div className="flex shrink-0 items-center justify-between border-b border-black/8 px-4 py-3 dark:border-white/10">
-          <h2 className="text-[15px] font-semibold text-neutral-900 dark:text-neutral-100">
+        <div className="flex shrink-0 items-center justify-between px-6 py-5">
+          <h2 className="text-[20px] font-medium text-neutral-800 dark:text-neutral-100">
             Settings
           </h2>
           <button
             type="button"
             onClick={requestClose}
-            className="grid h-6 w-6 place-items-center rounded-md text-neutral-500 hover:bg-black/6 dark:text-neutral-400 dark:hover:bg-white/10"
+            className="grid h-9 w-9 place-items-center rounded-full text-neutral-500 hover:bg-black/6 dark:text-neutral-400 dark:hover:bg-white/10"
           >
-            <CloseIcon size={13} />
+            <CloseIcon size={15} />
           </button>
         </div>
 
-        <div className="scroll-thin flex-1 space-y-3 overflow-y-auto px-4 py-3.5">
+        <div className="scroll-thin flex-1 space-y-3 overflow-y-auto px-6 py-1">
           <SectionLabel>Appearance</SectionLabel>
           <div className="flex gap-4">
             {THEME_MODES.map(({ value, label }) => (
@@ -136,7 +136,7 @@ export default function SettingsDialog({
                 key={value}
                 type="button"
                 onClick={() => onPatch({ background_style: value })}
-                className={`rounded-lg border px-2 py-1.5 text-[12.5px] transition-colors ${
+                className={`rounded-full border px-2 py-1.5 text-[12.5px] transition-colors ${
                   settings.background_style === value
                     ? "border-[var(--color-accent)] bg-[var(--color-accent-soft)] text-[var(--color-accent)]"
                     : "border-black/10 text-neutral-700 hover:bg-black/5 dark:border-white/15 dark:text-neutral-300 dark:hover:bg-white/8"
@@ -148,7 +148,7 @@ export default function SettingsDialog({
           </div>
 
           {settings.background_style === "custom" && (
-            <div className="space-y-2.5 rounded-lg border border-black/8 p-2.5 dark:border-white/10">
+            <div className="space-y-2.5 rounded-2xl border border-black/8 p-3 dark:border-white/10">
               <div className="flex items-center justify-between">
                 <p className="text-[12.5px] text-neutral-800 dark:text-neutral-100">
                   Particle color
@@ -223,7 +223,7 @@ export default function SettingsDialog({
             <button
               type="button"
               onClick={onClearUnpinned}
-              className="flex items-center gap-1.5 rounded-lg border border-black/10 px-3 py-1.5 text-[12.5px] text-neutral-800 hover:bg-black/5 dark:border-white/15 dark:text-neutral-100 dark:hover:bg-white/8"
+              className="flex items-center gap-1.5 rounded-full border border-black/10 px-3.5 py-1.5 text-[12.5px] text-neutral-800 hover:bg-black/5 dark:border-white/15 dark:text-neutral-100 dark:hover:bg-white/8"
             >
               <TrashIcon size={13} />
               Clear unpinned
@@ -231,7 +231,7 @@ export default function SettingsDialog({
             <button
               type="button"
               onClick={onClearAll}
-              className="rounded-lg px-3 py-1.5 text-[12.5px] font-medium text-[var(--color-accent)] hover:bg-black/5 dark:hover:bg-white/8"
+              className="rounded-full px-3.5 py-1.5 text-[12.5px] font-medium text-[var(--color-accent)] hover:bg-black/5 dark:hover:bg-white/8"
             >
               Clear everything
             </button>
@@ -251,7 +251,7 @@ export default function SettingsDialog({
                 key={value}
                 type="button"
                 onClick={() => onPatch({ quick_position: value })}
-                className={`flex-1 rounded-lg border px-3 py-1.5 text-[12.5px] transition-colors ${
+                className={`flex-1 rounded-full border px-3 py-1.5 text-[12.5px] transition-colors ${
                   settings.quick_position === value
                     ? "border-[var(--color-accent)] bg-[var(--color-accent-soft)] text-[var(--color-accent)]"
                     : "border-black/10 text-neutral-700 hover:bg-black/5 dark:border-white/15 dark:text-neutral-300 dark:hover:bg-white/8"
@@ -285,12 +285,12 @@ export default function SettingsDialog({
           </label>
         </div>
 
-        <div className="flex shrink-0 items-center justify-between border-t border-black/8 px-4 py-2.5 dark:border-white/10">
+        <div className="flex shrink-0 items-center justify-between px-6 py-5">
           <p className="text-[11px] text-neutral-400 dark:text-neutral-500">- niruxxdaboi -</p>
           <button
             type="button"
             onClick={requestClose}
-            className="rounded-lg px-3 py-1.5 text-[13px] font-semibold text-[var(--color-accent)] hover:bg-black/5 dark:hover:bg-white/8"
+            className="rounded-full bg-[var(--color-accent-soft)] px-5 py-2 text-[13.5px] font-medium text-[var(--color-accent)] hover:brightness-95 dark:hover:brightness-110"
           >
             Close
           </button>
@@ -357,7 +357,7 @@ function HotkeyRecorder({
           setError(null);
           setRecording(true);
         }}
-        className={`w-full rounded-lg border px-3 py-1.5 text-left text-[13px] transition-colors ${
+        className={`w-full rounded-xl border px-3 py-2 text-left text-[13px] transition-colors ${
           recording
             ? "border-[var(--color-accent)] text-[var(--color-accent)]"
             : "border-black/10 text-neutral-800 hover:bg-black/5 dark:border-white/15 dark:text-neutral-100 dark:hover:bg-white/8"
