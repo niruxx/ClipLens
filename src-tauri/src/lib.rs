@@ -169,7 +169,7 @@ pub fn hide_main_window(app: &tauri::AppHandle) {
         *shown = true;
         tray::notify(
             app,
-            "CrossClip is still running in the tray. Click the icon to reopen it.",
+            "ClipLens is still running in the tray. Click the icon to reopen it.",
         );
     }
 }

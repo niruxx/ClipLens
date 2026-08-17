@@ -105,7 +105,7 @@ export default function Header({
             <MenuButton onClick={runAndClose(onClearAll)}>Clear everything</MenuButton>
             <MenuSeparator />
             <MenuButton onClick={runAndClose(onQuit)} destructive>
-              Quit CrossClip
+              Quit ClipLens
             </MenuButton>
           </div>
         )}

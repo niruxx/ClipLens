@@ -25,7 +25,7 @@ export default function Sidebar({ filter, onFilterChange, counts }: SidebarProps
       <div className="flex items-center gap-2 px-2 py-2">
         <LogoIcon size={20} className="text-[var(--color-accent)]" />
         <span className="text-[14px] font-semibold text-neutral-900 dark:text-neutral-100">
-          CrossClip
+          ClipLens
         </span>
       </div>
 

@@ -16,7 +16,7 @@ const MARGIN: i32 = 14;
 
 pub fn create(app: &AppHandle) -> tauri::Result<WebviewWindow> {
     let window = WebviewWindowBuilder::new(app, LABEL, WebviewUrl::App("index.html".into()))
-        .title("CrossClip Quick Access")
+        .title("ClipLens Quick Access")
         .inner_size(WIDTH, HEIGHT)
         .resizable(false)
         .decorations(false)

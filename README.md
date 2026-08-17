@@ -1,6 +1,6 @@
-# CrossClip
+# ClipLens
 
-A fast, minimal clipboard manager and history tracker for the desktop. CrossClip
+A fast, minimal clipboard manager and history tracker for the desktop. ClipLens
 runs quietly in the background, records everything you copy — text and images —
 to a local SQLite database, and gets out of your way until you need it.
 
@@ -15,12 +15,12 @@ Runs on **Windows, macOS, and Linux**.
 
 | History | Settings |
 |---|---|
-| ![CrossClip clipboard history](screenshots/history.png) | ![CrossClip settings](screenshots/settings.png) |
+| ![ClipLens clipboard history](screenshots/history.png) | ![ClipLens settings](screenshots/settings.png) |
 
 ## Features
 
 **Capture & browse**
-- Automatic capture of every text or image copy while CrossClip runs.
+- Automatic capture of every text or image copy while ClipLens runs.
 - Persistent history in a local SQLite database — survives restarts.
 - Image copies are thumbnailed and stored alongside the full-size original.
 - Sidebar navigation across All, Pinned, Text, and Images, each with a live count.
@@ -88,7 +88,7 @@ To start hidden in the system tray (used by the autostart entry), pass
 `--minimized` to the built executable.
 
 The app keeps running in the tray after the window is closed — the close
-button hides it rather than exiting. Use **Quit CrossClip** from the tray
+button hides it rather than exiting. Use **Quit ClipLens** from the tray
 menu or the hamburger menu to actually stop it.
 
 ## Launch on boot
@@ -100,19 +100,19 @@ This uses [`tauri-plugin-autostart`](https://github.com/tauri-apps/plugins-works
 to write a per-user startup entry:
 
 - **Windows**: a value under `HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run`.
-- **macOS**: a LaunchAgent plist at `~/Library/LaunchAgents/com.crossclip.app.plist` (takes effect on next login).
+- **macOS**: a LaunchAgent plist at `~/Library/LaunchAgents/com.cliplens.app.plist` (takes effect on next login).
 - **Linux**: an XDG autostart entry, picked up by GNOME, KDE, XFCE, and most other desktop environments.
 
 ## Data storage
 
-CrossClip stores its data in Tauri's per-app data directory (identifier
-`com.crossclip.app`):
+ClipLens stores its data in Tauri's per-app data directory (identifier
+`com.cliplens.app`):
 
 | OS | Path |
 |---|---|
-| Windows | `%APPDATA%\com.crossclip.app` |
-| macOS | `~/Library/Application Support/com.crossclip.app` |
-| Linux | `~/.local/share/com.crossclip.app` |
+| Windows | `%APPDATA%\com.cliplens.app` |
+| macOS | `~/Library/Application Support/com.cliplens.app` |
+| Linux | `~/.local/share/com.cliplens.app` |
 
 Contents:
 
@@ -120,13 +120,13 @@ Contents:
 - `images/` — full-size PNGs and thumbnails for image clips
 - `settings.json` — app preferences
 
-Deleting this folder resets CrossClip to a clean state.
+Deleting this folder resets ClipLens to a clean state.
 
 ## Troubleshooting
 
 **The window is briefly blank/white on launch.** This is a known WebView2
 quirk on Windows: a window that goes from hidden to visible can come up fully
-un-painted until an input event reaches it. CrossClip works around this by
+un-painted until an input event reaches it. ClipLens works around this by
 synthesizing a click right after showing the window (see
 `src-tauri/src/winfocus.rs`); if you still see it, it should resolve itself
 the moment you click anywhere in the window.

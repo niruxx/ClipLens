@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "CrossClip",
+  "productName": "ClipLens",
   "version": "0.2.0",
-  "identifier": "com.crossclip.app",
+  "identifier": "com.cliplens.app",
   "build": {
     "beforeDevCommand": "npm run dev",
     "devUrl": "http://localhost:1420",
@@ -13,7 +13,7 @@
     "windows": [
       {
         "label": "main",
-        "title": "CrossClip",
+        "title": "ClipLens",
         "width": 980,
         "height": 680,
         "minWidth": 760,

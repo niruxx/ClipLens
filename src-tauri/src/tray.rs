@@ -27,7 +27,7 @@ pub fn build(app_handle: &AppHandle) -> tauri::Result<()> {
     let paused = state.settings.lock().unwrap().monitor_paused;
     let autostart_on = app_handle.autolaunch().is_enabled().unwrap_or(false);
 
-    let show_item = MenuItem::with_id(app_handle, "show", "Show CrossClip", true, None::<&str>)?;
+    let show_item = MenuItem::with_id(app_handle, "show", "Show ClipLens", true, None::<&str>)?;
     let pause_item =
         CheckMenuItem::with_id(app_handle, "pause", "Pause monitoring", true, paused, None::<&str>)?;
     let autostart_item = CheckMenuItem::with_id(
@@ -38,7 +38,7 @@ pub fn build(app_handle: &AppHandle) -> tauri::Result<()> {
         autostart_on,
         None::<&str>,
     )?;
-    let quit_item = MenuItem::with_id(app_handle, "quit", "Quit CrossClip", true, None::<&str>)?;
+    let quit_item = MenuItem::with_id(app_handle, "quit", "Quit ClipLens", true, None::<&str>)?;
 
     let menu = Menu::with_items(
         app_handle,
@@ -59,7 +59,7 @@ pub fn build(app_handle: &AppHandle) -> tauri::Result<()> {
 
     let tray = TrayIconBuilder::with_id("main-tray")
         .icon(icon)
-        .tooltip("CrossClip")
+        .tooltip("ClipLens")
         .menu(&menu)
         .show_menu_on_left_click(false)
         .on_menu_event(|app, event| match event.id().as_ref() {
@@ -107,7 +107,7 @@ pub fn notify(app_handle: &AppHandle, body: &str) {
     let _ = app_handle
         .notification()
         .builder()
-        .title("CrossClip")
+        .title("ClipLens")
         .body(body)
         .show();
 }
